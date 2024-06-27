@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace projetoRedeSocial.Models
+namespace RedeSocial.Models
 {
     public class Bloqueados
     {

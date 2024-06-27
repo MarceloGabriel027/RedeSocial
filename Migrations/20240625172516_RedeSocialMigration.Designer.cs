@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using projetoRedeSocial.Models;
+using RedeSocial.Models;
 
 #nullable disable
 
@@ -24,7 +24,7 @@ namespace RedeSocial.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Bloqueados", b =>
+            modelBuilder.Entity("RedeSocial.Models.Bloqueados", b =>
                 {
                     b.Property<int>("idBloqueio")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace RedeSocial.Migrations
                     b.ToTable("bloqueados");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Comentarios", b =>
+            modelBuilder.Entity("RedeSocial.Models.Comentarios", b =>
                 {
                     b.Property<int>("comentarioId")
                         .ValueGeneratedOnAdd()
@@ -84,7 +84,7 @@ namespace RedeSocial.Migrations
                     b.ToTable("comentarios");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Post", b =>
+            modelBuilder.Entity("RedeSocial.Models.Post", b =>
                 {
                     b.Property<int>("postId")
                         .ValueGeneratedOnAdd()
@@ -120,7 +120,7 @@ namespace RedeSocial.Migrations
                     b.ToTable("post");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Usuario", b =>
+            modelBuilder.Entity("RedeSocial.Models.Usuario", b =>
                 {
                     b.Property<int>("usuarioId")
                         .ValueGeneratedOnAdd()
@@ -162,15 +162,15 @@ namespace RedeSocial.Migrations
                     b.ToTable("usuario");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Bloqueados", b =>
+            modelBuilder.Entity("RedeSocial.Models.Bloqueados", b =>
                 {
-                    b.HasOne("projetoRedeSocial.Models.Usuario", "bloqueioUsuario")
+                    b.HasOne("RedeSocial.Models.Usuario", "bloqueioUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("projetoRedeSocial.Models.Usuario", "bloqueadoUsuario")
+                    b.HasOne("RedeSocial.Models.Usuario", "bloqueadoUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuarioBloqueado")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -181,15 +181,15 @@ namespace RedeSocial.Migrations
                     b.Navigation("bloqueioUsuario");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Comentarios", b =>
+            modelBuilder.Entity("RedeSocial.Models.Comentarios", b =>
                 {
-                    b.HasOne("projetoRedeSocial.Models.Post", "postComentario")
+                    b.HasOne("RedeSocial.Models.Post", "postComentario")
                         .WithMany()
                         .HasForeignKey("postId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("projetoRedeSocial.Models.Usuario", "usuarioComentario")
+                    b.HasOne("RedeSocial.Models.Usuario", "usuarioComentario")
                         .WithMany()
                         .HasForeignKey("usuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -200,9 +200,9 @@ namespace RedeSocial.Migrations
                     b.Navigation("usuarioComentario");
                 });
 
-            modelBuilder.Entity("projetoRedeSocial.Models.Post", b =>
+            modelBuilder.Entity("RedeSocial.Models.Post", b =>
                 {
-                    b.HasOne("projetoRedeSocial.Models.Usuario", "usuarioPost")
+                    b.HasOne("RedeSocial.Models.Usuario", "usuarioPost")
                         .WithMany()
                         .HasForeignKey("usuarioId")
                         .OnDelete(DeleteBehavior.Restrict)

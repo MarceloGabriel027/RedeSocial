@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace projetoRedeSocial.Models
+namespace RedeSocial.Models
 {
     public class Contexto : DbContext
     {

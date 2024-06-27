@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace projetoRedeSocial.Models
+namespace RedeSocial.Models
 {
     public class Comentarios
     {

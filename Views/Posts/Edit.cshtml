@@ -1,4 +1,4 @@
-﻿@model projetoRedeSocial.Models.Post
+﻿@model RedeSocial.Models.Post
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,18 +14,6 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                     <input type="hidden" asp-for="postId" />
                     <input type="hidden" asp-for="usuarioId" />
-
-                    <div class="form-group mb-3">
-                        <label asp-for="postTitulo" class="form-label">Título do Post</label>
-                        <input asp-for="postTitulo" class="form-control" />
-                        <span asp-validation-for="postTitulo" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="postDesc" class="form-label">Descrição</label>
-                        <textarea asp-for="postDesc" class="form-control"></textarea>
-                        <span asp-validation-for="postDesc" class="text-danger"></span>
-                    </div>
 
                     <div class="form-group mb-3">
                         <label asp-for="postArquivo" class="form-label">Arquivo</label>
@@ -71,7 +59,7 @@
 
 
 
-@* @model projetoRedeSocial.Models.Post
+@* @model RedeSocial.Models.Post
 
 @{
     ViewData["Title"] = "Edit";

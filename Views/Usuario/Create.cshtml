@@ -1,4 +1,4 @@
-﻿@model projetoRedeSocial.Models.Usuario
+﻿@model RedeSocial.Models.Usuario
 
 @{
     ViewData["Title"] = "Create";
@@ -16,11 +16,6 @@
                 <label asp-for="usuarioImagem" class="control-label"></label>
                 <input asp-for="usuarioImagem" class="form-control" />
                 <span asp-validation-for="usuarioImagem" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioDesc" class="control-label"></label>
-                <input asp-for="usuarioDesc" class="form-control" />
-                <span asp-validation-for="usuarioDesc" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="usuarioNome" class="control-label"></label>

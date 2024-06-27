@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using projetoRedeSocial.Models;
+using RedeSocial.Models;
 
-namespace projetoRedeSocial.Controllers
+namespace RedeSocial.Controllers
 {
     public class BloqueadosController : Controller
     {
@@ -58,17 +58,22 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idBloqueio,idUsuario,idUsuarioBloqueado")] Bloqueados bloqueados)
+        public async Task<IActionResult> Create(int usuarioBloqueadoId)
         {
+            Bloqueados bloqueados = new Bloqueados();
             if (ModelState.IsValid)
             {
+                int usuarioId = int.Parse(HttpContext.Session.GetString("UserId")!);
+                bloqueados.idUsuarioBloqueado = usuarioBloqueadoId;
+                bloqueados.idUsuario = usuarioId;
                 _context.Add(bloqueados);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = ViewBag.PostAtual.postId });
             }
             ViewData["idUsuarioBloqueado"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", bloqueados.idUsuarioBloqueado);
             ViewData["idUsuario"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", bloqueados.idUsuario);
-            return View(bloqueados);
+            return RedirectToAction("Details", "Posts", new { id = ViewBag.PostAtual.postId });
+            // return View(bloqueados);
         }
 
         // GET: Bloqueados/Edit/5

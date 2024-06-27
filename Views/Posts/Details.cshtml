@@ -1,4 +1,4 @@
-﻿@model projetoRedeSocial.Models.Post
+﻿@model RedeSocial.Models.Post
 
 @{
     ViewData["Title"] = "Details";
@@ -40,7 +40,7 @@
                     </div>
                 }
                 <!-- Botão de Curtida -->
-                @if (ViewBag.Curtida)
+                @* @if (ViewBag.Curtida)
                 {
                     <form asp-controller="Posts" asp-action="Descurtir" method="post" class="me-2">
                         <input type="hidden" name="id" value="@Model.postId" />
@@ -57,7 +57,7 @@
                             <i class="bi bi-hand-thumbs-up-fill me-1"></i> Curtir
                         </button>
                     </form>
-                }
+                } *@
             </div>
         </div>
 
@@ -79,21 +79,12 @@
                         </video>
                     }
                 </div>
-                <div class="col-md-6 mb-4">
-                    <h3>@Html.DisplayFor(model => model.postTitulo)</h3>
-                    <div class="overflow-auto" style="max-height: 400px;">
-                        <p>@Html.DisplayFor(model => model.postDesc)</p>
-                    </div>
-                </div>
             </div>
         }
         else
         {
             <div class="row d-flex justify-content-center align-items-center text-dark">
-                <div class="col-md-10 mb-4 text-center">
-                    <h3>@Html.DisplayFor(model => model.postTitulo)</h3>
-                    <p>@Html.DisplayFor(model => model.postDesc)</p>
-                </div>
+                teste
             </div>
         }
 
@@ -118,16 +109,46 @@
             {
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
-                        <p class="card-text">@comentario.comentario</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">@comentario.usuarioComentario.usuarioNome</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-gear"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <form asp-controller="Bloqueados" asp-action="Create" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" value="@comentario.usuarioId" />
+                                            <button type="submit" class="dropdown-item">Bloquear</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <p class="card-text mb-0">@comentario.comentario</p> <!-- Movido para a card-footer -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <form asp-controller="Comentarios" asp-action="DeleteConfirmed" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@comentario.comentarioId" />
+                                        <button type="submit" class="dropdown-item">Excluir</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             }
         }
-    </div>
-</div>
 
-<style>
+
+
+        <style>
     .post-card {
         border-radius: 0;
         overflow: hidden;
@@ -153,7 +174,7 @@
 </style>
 
 
-@* @model projetoRedeSocial.Models.Post
+@* @model RedeSocial.Models.Post
 
 @{
     ViewData["Title"] = "Details";

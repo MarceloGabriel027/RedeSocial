@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using projetoRedeSocial.Models;
+using RedeSocial.Models;
 
-namespace projetoRedeSocial.Controllers
+namespace RedeSocial.Controllers
 {
     public class ComentariosController : Controller
     {
@@ -147,7 +147,7 @@ namespace projetoRedeSocial.Controllers
         }
 
         // POST: Comentarios/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -162,7 +162,7 @@ namespace projetoRedeSocial.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Posts", new { id = comentarios!.postId });
         }
 
         private bool ComentariosExists(int id)

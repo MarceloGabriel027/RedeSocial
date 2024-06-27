@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using projetoRedeSocial.Models;
+using RedeSocial.Models;
 
-namespace projetoRedeSocial.Controllers
+namespace RedeSocial.Controllers
 {
     public class PostsController : Controller
     {
@@ -22,10 +22,14 @@ namespace projetoRedeSocial.Controllers
 
         public async Task<IActionResult> HomePost()
         {
-            ViewData["Usuario"] = _context.usuario.ToList();
-            ViewBag.UserId = HttpContext.Session.GetString("UserId");
-            var contexto = _context.post.Include(p => p.usuarioPost);
-            return View(await contexto.ToListAsync());
+            try
+            {
+                ViewData["Usuario"] = _context.usuario.ToList();
+                ViewBag.UserId = HttpContext.Session.GetString("UserId");
+                var contexto = _context.post.Include(p => p.usuarioPost);
+                return View(await contexto.ToListAsync());
+
+            } catch (Exception ex) { Console.WriteLine("-----------  ERRO:" + ex.Message); return View(); }
         }
 
         // GET: Posts
@@ -125,14 +129,17 @@ namespace projetoRedeSocial.Controllers
                 {
                     string extensaoArquivo = Path.GetExtension(postArquivo.FileName).ToLower();
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                    var uniqueFileName = "Post" + post.postId.ToString() + "_" + DateTime.Now.ToString() + "IMG" + extensaoArquivo;
+                    var uniqueFileName = "Post" + post.postId.ToString() + "_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '.').Replace(' ', 't') + "IMG" + extensaoArquivo;
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     Directory.CreateDirectory(uploadsFolder);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    try
                     {
-                        await postArquivo.CopyToAsync(fileStream);
-                    }
-                    post.postArquivo = "/uploads/" + uniqueFileName;
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await postArquivo.CopyToAsync(fileStream);
+                        }
+                        post.postArquivo = "/uploads/" + uniqueFileName;
+                    } catch (Exception ex) { Console.WriteLine("----------- ERRO: " + ex.Message); }
                 }
                 _context.Add(post);
                 await _context.SaveChangesAsync();
@@ -150,7 +157,7 @@ namespace projetoRedeSocial.Controllers
                 return NotFound();
             }
 
-            var post = await _context.post.FindAsync(id);
+            var post = await _context.post.FirstOrDefaultAsync(m => m.postId == id);
             if (post == null)
             {
                 return NotFound();
@@ -224,12 +231,24 @@ namespace projetoRedeSocial.Controllers
                 return Problem("Entity set 'Contexto.post'  is null.");
             }
             var post = await _context.post.FindAsync(id);
+            var comentarios = await _context.comentarios.ToListAsync();
+            List<Comentarios> commentsToDelete = new List<Comentarios>();
             if (post != null)
             {
+                // Busque todos os posts do usuário
+                foreach (Comentarios comment in comentarios)
+                {
+                    if (comment.postId == post.postId)
+                    {
+                        commentsToDelete.Add(comment);
+                    }
+                }
+                // Exclua os posts e os comentários deste
+                _context.comentarios.RemoveRange(commentsToDelete);
+                await _context.SaveChangesAsync();
                 _context.post.Remove(post);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(HomePost));
         }
 

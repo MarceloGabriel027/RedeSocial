@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using projetoRedeSocial.Models;
+using RedeSocial.Models;
 
-namespace projetoRedeSocial.Controllers
+namespace RedeSocial.Controllers
 {
     public class UsuarioController : Controller
     {
