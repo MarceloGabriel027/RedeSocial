@@ -1,6 +1,5 @@
 ﻿body {
-    background: rgb(118,136,226);
-    background: radial-gradient(circle, rgba(118,136,226,1) 33%, rgba(250,54,94,1) 100%);
+    border-block-color:black;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -11,7 +10,7 @@
 }
 
 .form-container {
-    background-color: transparent;
+    background-color:#fff;
     border: 1px solid #dbdbdb;
     padding: 40px;
     max-width: 350px;

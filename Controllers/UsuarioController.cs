@@ -106,6 +106,8 @@ namespace RedeSocial.Controllers
 
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
             var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
+            List<Bloqueados>? bloqueados = await _context.bloqueados.Where(b => b.idUsuario == id).ToListAsync();
+            ViewBag.Bloqueados = bloqueados;
             if (usuario == null)
             {
                 return NotFound();
@@ -124,12 +126,15 @@ namespace RedeSocial.Controllers
             ViewData["Users"] = _context.usuario.ToList();
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
             var usuario = await _context.usuario
-
                 .FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {
                 return NotFound();
             }
+            int userID = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            ViewBag.UserId = userID;
+            List<Bloqueados>? bloqueados = await _context.bloqueados.Where(b => b.idUsuario == id).ToListAsync();
+            ViewBag.Bloqueados = bloqueados;
 
             return View(usuario);
         }

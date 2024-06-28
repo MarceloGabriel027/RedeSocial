@@ -29,29 +29,23 @@
                     <input asp-for="usuarioEmail" type="email" class="form-control" required />
                     <span asp-validation-for="usuarioEmail" class="text-danger"></span>
                 </div>
-                @* <div class="form-group">
-                    <label asp-for="usuarioSenha" class="control-label"></label>
-                    <input asp-for="usuarioSenha" type="password" class="form-control" required />
-                    <span asp-validation-for="usuarioSenha" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="usuarioEndereco" class="control-label"></label>
-                    <input asp-for="usuarioEndereco" class="form-control" />
-                    <span asp-validation-for="usuarioEndereco" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="usuarioCPF" class="control-label"></label>
-                    <input asp-for="usuarioCPF" type="number" class="form-control" />
-                    <span asp-validation-for="usuarioCPF" class="text-danger"></span>
-                </div> *@
             </div>
             <div class="row col-4">
                 <div class="form-group">
                     <input asp-controller="Posts" asp-action="Edit" type="submit" value="Salvar" class="btn btn-primary mt-2" />
                 </div>
-                @* <div>
-                    <a asp-controller="Usuario" asp-action="DetailsUser">Back to List</a>
-                </div> *@
+                <div>
+                    @{
+                        @inject IHttpContextAccessor httpContextAccessor
+
+                        // Recuperar o cookie (por exemplo, em _Layout.cshtml)
+                        var userIdCookie = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
+
+                        <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@userIdCookie" class="btn btn-info">
+                            Voltar
+                        </a>
+                    }
+                </div>
             </div>
         </form>
     </div>

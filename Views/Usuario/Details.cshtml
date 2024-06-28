@@ -7,19 +7,6 @@
 <div class="outer-border">
     <div class="container mt-4 p-4">
         <div class="row align-items-center justify-content-between">
-            <div class="col-auto">
-                <div class="col-auto align-content-center">
-                    @if (Model.usuarioImagem != null)
-                    {
-                        <img src="@Url.Content(Model.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: fill;" />
-                    }
-                    else
-                    {
-                        <i class="bi bi-person-circle post-img rounded-circle fs-1" style="object-fit: cover; color:white"></i>
-                    }
-                </div>
-            </div>
-
             <div class="col text-dark">
                 <h1>@Model.usuarioNome</h1>
                 <h4>Telefone: @Model.usuarioTelefone</h4>
@@ -27,19 +14,11 @@
             </div>
 
             <div class="col-auto d-flex justify-content-center">
-                @if (ViewBag.Seguidor)
+                @foreach (Bloqueados bloqueado in ViewBag.Bloqueados)
                 {
-                    <form asp-controller="Usuario" asp-action="DeixarDeSeguir" method="post">
-                        <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-outline-danger d-flex align-items-center">
-                            <i class="bi bi-hand-thumbs-down-fill me-1">Deixar de Seguir</i>
-                        </button>
-                    </form>
-                }
-                else
-                {
-                    <form asp-controller="Usuario" asp-action="Seguir" method="post">
-                        <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-outline-primary d-flex align-items-center">
-                            <i class="bi bi-hand-thumbs-up-fill me-1">Seguir</i>
+                    <form asp-controller="Bloqueados" asp-action="DeleteConfirmed" method="post">
+                        <button type="submit" name="id" value="@bloqueado.idBloqueio" class="btn btn-outline-danger d-flex align-items-center">
+                            <i class="bi bi-hand-thumbs-down-fill me-1">Desbloquear</i>
                         </button>
                     </form>
                 }
@@ -69,10 +48,11 @@
                                         </video>
                                     }
                                 }
-                                else
-                                {
-                                    <p>teste</p>
-                                }
+                                <div class="post-overlay">
+                                    <div class="post-content">
+                                        @post.postTxt
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>

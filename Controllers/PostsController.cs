@@ -24,8 +24,11 @@ namespace RedeSocial.Controllers
         {
             try
             {
-                ViewData["Usuario"] = _context.usuario.ToList();
-                ViewBag.UserId = HttpContext.Session.GetString("UserId");
+                int userId = int.Parse(HttpContext.Session.GetString("UserId")!);
+                ViewBag.UserId = userId;
+                List<Bloqueados> bloqueados = await _context.bloqueados.Where(u => u.idBloqueio == userId).ToListAsync();
+                List<int> idsBloqueados = bloqueados.Select(b => b.idUsuarioBloqueado).ToList();
+                ViewBag.IdsBloqueados = idsBloqueados;
                 var contexto = _context.post.Include(p => p.usuarioPost);
                 return View(await contexto.ToListAsync());
 
@@ -120,16 +123,17 @@ namespace RedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCor,postStatus")] Post post, IFormFile? postArquivo)
+        public async Task<IActionResult> Create([Bind("postId,postTxt,postDate,postStatus")] Post post, IFormFile? postArquivo)
         {
             post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId")!);
             if (ModelState.IsValid)
             {
+                post.postDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 if (postArquivo != null)
                 {
                     string extensaoArquivo = Path.GetExtension(postArquivo.FileName).ToLower();
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                    var uniqueFileName = "Post" + post.postId.ToString() + "_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '.').Replace(' ', 't') + "IMG" + extensaoArquivo;
+                    var uniqueFileName = "Post" + post.postId.ToString() + "_" + post.postDate.Replace('/', '-').Replace(':', '.').Replace(' ', 't') + "IMG" + extensaoArquivo;
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     Directory.CreateDirectory(uploadsFolder);
                     try
@@ -171,7 +175,7 @@ namespace RedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("postId,usuarioId,postTitulo,postDesc,postArquivo,postCor,postDate,postStatus")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("postId,usuarioId,postTxt,postArquivo,postArquivoTemp,postDate,postStatus")] Post post, IFormFile? postArquivo)
         {
             if (id != post.postId)
             {
@@ -182,6 +186,31 @@ namespace RedeSocial.Controllers
             {
                 try
                 {
+                    if (postArquivo != null)
+                    {
+                        if (post.postArquivoTemp != null || post.postArquivoTemp != "")
+                        {
+                            // Delete File
+                            System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", post.postArquivoTemp!));
+                        }
+                        string extensaoArquivo = Path.GetExtension(postArquivo.FileName).ToLower();
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        var uniqueFileName = "Post" + post.postId.ToString() + "_" + post.postDate.Replace('/', '-').Replace(':', '.').Replace(' ', 't') + "IMG" + extensaoArquivo;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        Directory.CreateDirectory(uploadsFolder);
+                        try
+                        {
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await postArquivo.CopyToAsync(fileStream);
+                            }
+                            post.postArquivo = "/uploads/" + uniqueFileName;
+                        }
+                        catch (Exception ex) { Console.WriteLine("----------- ERRO: " + ex.Message); }
+                    } else
+                    {
+                        post.postArquivo = post.postArquivoTemp;
+                    }
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
@@ -235,6 +264,11 @@ namespace RedeSocial.Controllers
             List<Comentarios> commentsToDelete = new List<Comentarios>();
             if (post != null)
             {
+                // Deleta arquivo do post
+                if (post.postArquivo != null || post.postArquivo != "")
+                {
+                    System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", post.postArquivo!));
+                }
                 // Busque todos os posts do usuário
                 foreach (Comentarios comment in comentarios)
                 {

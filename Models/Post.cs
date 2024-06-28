@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RedeSocial.Models
 {
@@ -24,6 +25,10 @@ namespace RedeSocial.Models
         [Column("postArquivo")]
         [Display(Name = "Arquivo")]
         public string? postArquivo { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public string? postArquivoTemp { get; set; }
 
         [Column("postDate")]
         [Display(Name = "Data da postagem")]

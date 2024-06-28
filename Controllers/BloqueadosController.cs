@@ -46,12 +46,14 @@ namespace RedeSocial.Controllers
         }
 
         // GET: Bloqueados/Create
+        /*
         public IActionResult Create()
         {
             ViewData["idUsuarioBloqueado"] = new SelectList(_context.usuario, "usuarioId", "usuarioId");
             ViewData["idUsuario"] = new SelectList(_context.usuario, "usuarioId", "usuarioId");
             return View();
         }
+        */
 
         // POST: Bloqueados/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -152,7 +154,6 @@ namespace RedeSocial.Controllers
         }
 
         // POST: Bloqueados/Delete/5
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -9,17 +9,7 @@
         <!-- Perfil do Usuário -->
         <div class="row align-items-center mb-4">
             <div class="col-auto">
-                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId" class="text-decoration-none text-dark">
-                    @if (Model.usuarioPost?.usuarioImagem != null)
-                    {
-                        <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;" />
-                    }
-                    else
-                    {
-                        <i class="fs-1 bi bi-person-circle" style="color: #6c757d;"></i>
-                    }
-                    <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
-                </a>
+                <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
             </div>
             <div class="col d-flex align-items-center justify-content-end">
                 @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
@@ -39,31 +29,15 @@
                         </ul>
                     </div>
                 }
-                <!-- Botão de Curtida -->
-                @* @if (ViewBag.Curtida)
-                {
-                    <form asp-controller="Posts" asp-action="Descurtir" method="post" class="me-2">
-                        <input type="hidden" name="id" value="@Model.postId" />
-                        <button type="submit" class="btn btn-outline-danger d-flex align-items-center">
-                            <i class="bi bi-hand-thumbs-down-fill me-1"></i> Descurtir
-                        </button>
-                    </form>
-                }
-                else
-                {
-                    <form asp-controller="Posts" asp-action="Curtir" method="post" class="me-2">
-                        <input type="hidden" name="id" value="@Model.postId" />
-                        <button type="submit" class="btn btn-outline-primary d-flex align-items-center">
-                            <i class="bi bi-hand-thumbs-up-fill me-1"></i> Curtir
-                        </button>
-                    </form>
-                } *@
             </div>
         </div>
 
         <hr />
 
         <!-- Conteúdo do Post -->
+        <div>
+            <p>@Model.postTxt</p>
+        </div>
         @if (!string.IsNullOrEmpty(Model.postArquivo))
         {
             <div class="row d-flex justify-content-center align-items-center">
@@ -111,44 +85,54 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="card-title mb-0">@comentario.usuarioComentario.usuarioNome</h5>
+                            @if (comentario.usuarioId != ViewBag.UserId)
+                            {
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-gear"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <form asp-controller="Bloqueados" asp-action="Create" method="post" style="display:inline;">
+                                                <input type="hidden" name="id" value="@comentario.usuarioId" />
+                                                <button type="submit" class="dropdown-item">Bloquear</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>                                
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <p class="card-text mb-0">@comentario.comentario</p> <!-- Movido para a card-footer -->
+                        @if (ViewBag.UserId == comentario.usuarioId)
+                        {
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-gear"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                                     <li>
-                                        <form asp-controller="Bloqueados" asp-action="Create" method="post" style="display:inline;">
-                                            <input type="hidden" name="id" value="@comentario.usuarioId" />
-                                            <button type="submit" class="dropdown-item">Bloquear</button>
+                                        <form asp-controller="Comentarios" asp-action="DeleteConfirmed" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" value="@comentario.comentarioId" />
+                                            <button type="submit" class="dropdown-item">Excluir</button>
                                         </form>
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                        <p class="card-text mb-0">@comentario.comentario</p> <!-- Movido para a card-footer -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-gear"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <form asp-controller="Comentarios" asp-action="DeleteConfirmed" method="post" style="display:inline;">
-                                        <input type="hidden" name="id" value="@comentario.comentarioId" />
-                                        <button type="submit" class="dropdown-item">Excluir</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                            </div>                            
+                        }
                     </div>
                 </div>
             }
         }
+        <div>
+            <a asp-action="HomePost" class="btn btn-info">Voltar</a>
+        </div>
 
 
 
-        <style>
+
+    <style>
     .post-card {
         border-radius: 0;
         overflow: hidden;
@@ -171,7 +155,7 @@
             color: #fff;
             padding: 10px;
         }
-</style>
+    </style>
 
 
 @* @model RedeSocial.Models.Post
