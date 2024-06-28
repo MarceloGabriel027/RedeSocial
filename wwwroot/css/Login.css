@@ -1,6 +1,6 @@
 ﻿body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #1E90FF;
+    background: #1E90FF;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -10,7 +10,6 @@
 }
 
 .login-page {
-    background: #1E90FF;
     display: flex;
     justify-content: center;
     align-items: center;
