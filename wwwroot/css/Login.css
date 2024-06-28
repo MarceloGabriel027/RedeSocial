@@ -1,11 +1,12 @@
 ﻿body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    
+    background-color: #1E90FF;
+    margin: 0;
+    padding: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-   
 }
 
 .login-page {
@@ -17,7 +18,7 @@
 }
 
 .login-container {
-    background-color:aliceblue;
+    background-color: #fff;
     border: 1px solid #dbdbdb;
     padding: 40px;
     max-width: 350px;

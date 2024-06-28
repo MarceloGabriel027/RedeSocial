@@ -5,6 +5,79 @@
     ViewData["Title"] = "Edit";
 }
 
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+</style>
+
+<div class="container">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Editar Usuário</h5>
+
+                <form asp-action="Edit" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="usuarioId" />
+
+                    <div class="form-group">
+                        <label asp-for="usuarioNome" class="control-label">Nome</label>
+                        <input asp-for="usuarioNome" class="form-control" required />
+                        <span asp-validation-for="usuarioNome" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="usuarioTelefone" class="control-label">Telefone</label>
+                        <input asp-for="usuarioTelefone" type="tel" class="form-control" />
+                        <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="usuarioEmail" class="control-label">Email</label>
+                        <input asp-for="usuarioEmail" type="email" class="form-control" required />
+                        <span asp-validation-for="usuarioEmail" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <div class="row">
+                            <div class="col">
+                                <input asp-controller="Posts" asp-action="Edit" type="submit" value="Salvar" class="btn btn-primary m-3" />
+                            </div>
+                            <div class="col">
+                                @{
+                                    @inject IHttpContextAccessor httpContextAccessor
+                                    var userIdCookie = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
+                                }
+
+                                <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@userIdCookie" class="btn btn-secondary m-3">
+                                    Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@* @model RedeSocial.Models.Usuario
+
+@{
+    Layout = "_LayoutVazio";
+    ViewData["Title"] = "Edit";
+}
+
 <div class="row justify-content-center">
     <div class="col-auto text-dark">
         <form asp-action="Edit" enctype="multipart/form-data">
@@ -49,7 +122,7 @@
             </div>
         </form>
     </div>
-</div>
+</div> *@
 
 
 
